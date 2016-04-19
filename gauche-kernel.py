@@ -2,7 +2,7 @@
 
 # ===== DEFINITIONS =====
 
-from IPython.kernel.zmq.kernelbase import Kernel
+from ipykernel.kernelbase import Kernel
 from pexpect import replwrap, EOF
 from subprocess import check_output
 
@@ -54,7 +54,7 @@ class EgisonKernel(Kernel):
         try:
             self.gauchewrapper = replwrap.REPLWrapper("gosh", "gosh>", None)
         finally:
-            s.s.isg.nial(signal.SIGINT, sig)
+            signal.signal(signal.SIGINT, sig)
 
 
     def do_execute(self, code, silent, store_history=True,
@@ -90,5 +90,5 @@ class EgisonKernel(Kernel):
 
 # ===== MAIN =====
 if __name__ == '__main__':
-    from IPython.kernel.zmq.kernelapp import IPKernelApp
+    from ipykernel.kernelapp import IPKernelApp
     IPKernelApp.launch_instance(kernel_class=EgisonKernel)

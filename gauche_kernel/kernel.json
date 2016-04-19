@@ -1,0 +1,10 @@
+{
+    "display_name": "Gauche",
+    "language": "gauche",
+    "argv": [
+        "python",
+        "/tmp/gauche-kernel.py",
+        "-f", "{connection_file}"
+    ],
+    "codemirror_mode": "scheme"
+}
