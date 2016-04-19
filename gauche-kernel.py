@@ -8,30 +8,18 @@ from subprocess import check_output
 
 import re
 import signal
-import uuid
 
 __version__ = '0.0.1'
 
-version_pat = re.compile(r'(\d+(\.\d+)+)')
 crlf_pat = re.compile(r'[\r\n]+')
 
-class EgisonKernel(Kernel):
+class GaucheKernel(Kernel):
     implementation = 'gauche_kernel'
     implementation_version = __version__
 
-    _language_version = None
-
-    @property
-    def language_version(self):
-        if self._language_version is None:
-            m = version_pat.search(check_output(['gosh', '-V']).decode('utf-8'))
-            self._language_version = m.group(1)
-        return self._language_version
-
-
     @property
     def banner(self):
-        return u'Gauche Kernel (Gauche v%s)' % self.language_version
+        return u'Gauche Kernel'
 
 
     language_info = {'name': 'gauche',
@@ -42,14 +30,10 @@ class EgisonKernel(Kernel):
 
     def __init__(self, **kwargs):
         Kernel.__init__(self, **kwargs)
-        self._start_egison()
+        self._start_gauche()
 
 
-    def _start_egison(self):
-        # Signal handlers are inherited by forked processes, and we can't easily
-        # reset it from the subprocess. Since kernelapp ignores SIGINT except in
-        # message handlers, we need to temporarily reset the SIGINT handler here
-        # so that Egison is interruptible.
+    def _start_gauche(self):
         sig = signal.signal(signal.SIGINT, signal.SIG_DFL)
         try:
             self.gauchewrapper = replwrap.REPLWrapper("gosh", "gosh>", None)
@@ -74,10 +58,9 @@ class EgisonKernel(Kernel):
             output = self.gauchewrapper.child.before
         except EOF:
             output = self.gauchewrapper.child.before + 'Restarting Gauche'
-            self._start_egison()
+            self._start_gauche()
 
         if not silent:
-            # Send standard output
             stream_content = {'name': 'stdout', 'text': output}
             self.send_response(self.iopub_socket, 'stream', stream_content)
 
@@ -87,8 +70,6 @@ class EgisonKernel(Kernel):
         return {'status': 'ok', 'execution_count': self.execution_count,
                 'payload': [], 'user_expressions': {}}
 
-
-# ===== MAIN =====
 if __name__ == '__main__':
     from ipykernel.kernelapp import IPKernelApp
-    IPKernelApp.launch_instance(kernel_class=EgisonKernel)
+    IPKernelApp.launch_instance(kernel_class=GaucheKernel)
