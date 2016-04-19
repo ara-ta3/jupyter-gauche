@@ -4,3 +4,6 @@ virtualenv:
 
 install-dev:
 	./bin/pip install -r ./requirements.txt
+
+install:
+	python -m gauche_kernel.install --user $(user)
