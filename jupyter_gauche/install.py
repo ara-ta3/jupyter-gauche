@@ -8,7 +8,7 @@ from IPython.utils.tempdir import TemporaryDirectory
 kernel_json = {
     "display_name": "Gauche",
     "language": "gauche",
-    "argv": [sys.executable, "-m", "gauche_kernel", "-f", "{connection_file}"],
+    "argv": [sys.executable, "-m", "jupyter_gauche", "-f", "{connection_file}"],
     "codemirror_mode": "scheme"
 }
 
