@@ -11,7 +11,18 @@ import signal
 
 __version__ = '0.0.1'
 
-crlf_pat = re.compile(r'[\r\n]+')
+def parse_commands(code):
+    codes = []
+    tmp = ""
+    for c in code.splitlines():
+        tmp += (" " + c.strip())
+        tmp = tmp.strip()
+        start = tmp.count("(")
+        end = tmp.count(")")
+        if tmp and start == end:
+            codes.append(tmp)
+            tmp = ""
+    return codes
 
 class GaucheKernel(Kernel):
     implementation = 'gauche_kernel'
@@ -43,7 +54,7 @@ class GaucheKernel(Kernel):
 
     def do_execute(self, code, silent, store_history=True,
                    user_expressions=None, allow_stdin=False):
-        code = crlf_pat.sub(' ', code.strip())
+        code = "\n".join(parse_commands(code))
         if not code:
             return {'status': 'ok', 'execution_count': self.execution_count,
                     'payload': [], 'user_expressions': {}}
