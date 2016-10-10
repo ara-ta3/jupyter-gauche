@@ -9,7 +9,7 @@ from subprocess import check_output
 import re
 import signal
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 def parse_commands(code):
     codes = []

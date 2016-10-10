@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 
 setup(name='jupyter_gauche',
-      version='0.0.3',
+      version='0.0.4',
       description='Gauche Kernel for Jupyter Notebook',
       install_requires = [
             'ipykernel',
