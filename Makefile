@@ -1,4 +1,4 @@
-test:
+test: bin/python
 	python -m unittest -v t 
 
 bin/pip:
@@ -7,5 +7,11 @@ bin/pip:
 install-dev: bin/pip
 	$< install -r ./requirements.txt
 
-install:
-	python -m gauche_kernel.install --user $(user)
+install: bin/python
+	$< -m jupyter_gauche.install --user $(user)
+
+upload: bin/python
+	$< setup.py sdist upload -v
+
+register: bin/python
+	$< setup.py register
