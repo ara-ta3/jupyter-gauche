@@ -1,5 +1,5 @@
 test:
-	python -m unittest t
+	python -m unittest -v t 
 
 bin/pip:
 	virtualenv -p python3 .

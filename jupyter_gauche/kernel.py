@@ -9,13 +9,14 @@ from subprocess import check_output
 import re
 import signal
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 def parse_commands(code):
     codes = []
     tmp = ""
     for c in code.splitlines():
-        tmp += (" " + c.strip())
+        comment_out_removed = remove_comment_out(c.strip())
+        tmp += (" " + comment_out_removed)
         tmp = tmp.strip()
         start = tmp.count("(")
         end = tmp.count(")")
@@ -23,6 +24,13 @@ def parse_commands(code):
             codes.append(tmp)
             tmp = ""
     return codes
+
+def remove_comment_out(code):
+    comment_out_idx = code.find(";")
+    if comment_out_idx > -1:
+        return code[:comment_out_idx]
+    else:
+        return code
 
 class GaucheKernel(Kernel):
     implementation = 'gauche_kernel'
