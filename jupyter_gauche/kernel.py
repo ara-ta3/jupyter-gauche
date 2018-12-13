@@ -55,7 +55,7 @@ class GaucheKernel(Kernel):
     def _start_gauche(self):
         sig = signal.signal(signal.SIGINT, signal.SIG_DFL)
         try:
-            self.gauchewrapper = replwrap.REPLWrapper("gosh", "gosh>", None)
+            self.gauchewrapper = replwrap.REPLWrapper("gosh", "gosh> ", None)
         finally:
             signal.signal(signal.SIGINT, sig)
 
